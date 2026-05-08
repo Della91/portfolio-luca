@@ -1,65 +1,65 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import photo1 from '../assets/photo-1.png'; // straight / default
-import photo2 from '../assets/photo-2.png'; // upper-right
-import photo3 from '../assets/photo-3.png'; // right (strong)
-import photo4 from '../assets/photo-4.png'; // up
-import photo5 from '../assets/photo-5.png'; // down
-import photo6 from '../assets/photo-6.png'; // upper-left
-import photo7 from '../assets/photo-7.png'; // upper-right (subtle)
-import photo8 from '../assets/photo-8.png'; // lower-right
-import photo9 from '../assets/photo-9.png'; // right (variant)
+import photo1 from '../assets/photo-1.png'; // dritto / default
+import photo2 from '../assets/photo-2.png'; // sinistra (lieve)
+import photo3 from '../assets/photo-3.png'; // destra (forte)
+import photo4 from '../assets/photo-4.png'; // su
+import photo5 from '../assets/photo-5.png'; // giù
+import photo6 from '../assets/photo-6.png'; // sinistra-alto
+import photo7 from '../assets/photo-7.png'; // sinistra (moderata)
+import photo8 from '../assets/photo-8.png'; // destra-basso
+import photo9 from '../assets/photo-9.png'; // destra (moderata)
 
 type Zone =
   | 'center'
-  | 'upper-left'
-  | 'upper-right'
-  | 'upper-right-subtle'
-  | 'right'
-  | 'right-variant'
-  | 'lower-right'
   | 'up'
-  | 'down';
+  | 'upper-left'
+  | 'down'
+  | 'lower-right'
+  | 'right'
+  | 'right-mid'
+  | 'left'
+  | 'left-subtle';
 
 const ZONE_PHOTOS: Record<Zone, string> = {
   center: photo1,
-  'upper-right-subtle': photo7,
-  'upper-right': photo2,
-  'right-variant': photo9,
-  right: photo3,
-  'lower-right': photo8,
   up: photo4,
-  down: photo5,
   'upper-left': photo6,
+  down: photo5,
+  'lower-right': photo8,
+  right: photo3,
+  'right-mid': photo9,
+  left: photo7,
+  'left-subtle': photo2,
 };
 
 function getZone(nx: number, ny: number): Zone {
-  // nx: -1 (left) → +1 (right), ny: -1 (top) → +1 (bottom)
-  if (Math.abs(nx) < 0.25 && Math.abs(ny) < 0.25) return 'center';
-  if (ny < -0.4) {
-    if (nx > 0.2) return 'upper-right';
+  // Banda superiore
+  if (ny < -0.35) {
     if (nx < -0.2) return 'upper-left';
     return 'up';
   }
-  if (ny > 0.4) {
+  // Banda inferiore
+  if (ny > 0.35) {
     if (nx > 0.1) return 'lower-right';
     return 'down';
   }
-  // mid-vertical band
-  if (nx > 0.6) return 'right';
-  if (nx > 0.25) return nx > 0.45 ? 'right-variant' : 'upper-right-subtle';
-  if (nx < -0.25) return 'upper-left';
+  // Banda centrale verticale
+  if (nx > 0.55) return 'right';
+  if (nx > 0.2) return 'right-mid';
+  if (nx < -0.4) return 'left';
+  if (nx < -0.15) return 'left-subtle';
   return 'center';
 }
 
-const HYSTERESIS = 0.08; // normalized units — prevents flickering at zone edges
+const DEBOUNCE_MS = 60;
 
 export default function ProfileAvatar() {
   const [zone, setZone] = useState<Zone>('center');
   const rafRef = useRef<number | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentZoneRef = useRef<Zone>('center');
-  // raw position at last zone change, for hysteresis
-  const zoneOriginRef = useRef({ nx: 0, ny: 0 });
+  const pendingRef = useRef<Zone>('center');
 
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine)').matches) return;
@@ -69,18 +69,25 @@ export default function ProfileAvatar() {
       rafRef.current = requestAnimationFrame(() => {
         const nx = (e.clientX / window.innerWidth) * 2 - 1;
         const ny = (e.clientY / window.innerHeight) * 2 - 1;
-
         const candidate = getZone(nx, ny);
 
-        if (candidate !== currentZoneRef.current) {
-          const dx = nx - zoneOriginRef.current.nx;
-          const dy = ny - zoneOriginRef.current.ny;
-          // only switch zone if cursor has moved enough from the last switch point
-          if (Math.sqrt(dx * dx + dy * dy) >= HYSTERESIS) {
-            currentZoneRef.current = candidate;
-            zoneOriginRef.current = { nx, ny };
-            setZone(candidate);
+        if (candidate === currentZoneRef.current) {
+          // Se torniamo nella zona corrente, annulla qualsiasi switch pendente
+          if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+            debounceRef.current = null;
           }
+          return;
+        }
+
+        if (candidate !== pendingRef.current) {
+          pendingRef.current = candidate;
+          if (debounceRef.current) clearTimeout(debounceRef.current);
+          debounceRef.current = setTimeout(() => {
+            currentZoneRef.current = candidate;
+            setZone(candidate);
+            debounceRef.current = null;
+          }, DEBOUNCE_MS);
         }
       });
     };
@@ -89,23 +96,20 @@ export default function ProfileAvatar() {
     return () => {
       window.removeEventListener('mousemove', handleMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
 
-  const src = ZONE_PHOTOS[zone];
-
   return (
     <Frame>
-      {Object.entries(ZONE_PHOTOS).map(([z, imgSrc]) => (
+      {(Object.entries(ZONE_PHOTOS) as [Zone, string][]).map(([z, src]) => (
         <Photo
           key={z}
-          src={imgSrc}
+          src={src}
           alt={z === 'center' ? 'Luca Della Vecchia' : ''}
           $visible={z === zone}
         />
       ))}
-      {/* preload hidden — avoids first-switch flash */}
-      <span aria-hidden style={{ display: 'none' }}>{src}</span>
     </Frame>
   );
 }
@@ -127,6 +131,6 @@ const Photo = styled.img<{ $visible: boolean }>`
   object-position: top center;
   display: block;
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  transition: opacity 0.18s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
   will-change: opacity;
 `;
