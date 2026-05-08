@@ -140,6 +140,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
+    server: {
+      port: 5173,
+      strictPort: false,
+    },
     plugins: [
       react(),
       // Attivo solo in modalità development: gestisce /api/chat senza Vercel CLI.
