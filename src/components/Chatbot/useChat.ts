@@ -69,12 +69,17 @@ export function useChat(): UseChatResult {
         });
 
         if (!response.ok) {
-          let errorMessage = 'Errore di rete. Riprova tra poco.';
+          let errorMessage =
+            response.status === 404
+              ? 'Endpoint non trovato. Assicurati che il dev server sia in esecuzione.'
+              : response.status === 429
+                ? 'Hai raggiunto il limite di messaggi. Riprova più tardi.'
+                : 'Errore di rete. Riprova tra poco.';
           try {
             const data = await response.json();
             if (data?.error) errorMessage = data.error;
           } catch {
-            // Mantiene il messaggio di default.
+            // Mantiene il messaggio derivato dallo status code.
           }
           throw new Error(errorMessage);
         }
