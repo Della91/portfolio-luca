@@ -1,55 +1,19 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { AnimatePresence, motion } from 'framer-motion';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import PageContainer from '../layout/PageContainer';
-import { experiences } from '../../data/experience';
-import { theme } from '../../styles/theme';
+import { useId, useRef, useState } from "react";
+import styled from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import PageContainer from "../layout/PageContainer";
+import { experiences } from "../../data/experience";
+import { theme } from "../../styles/theme";
 
 const RESPONSIBILITIES_PREVIEW = 4;
-const ONGOING_KEYWORDS = ['presente', 'present', 'oggi', 'now'];
+const ONGOING_KEYWORDS = ["presente", "present", "oggi", "now"];
 
 const isOngoing = (period: string) =>
   ONGOING_KEYWORDS.some((k) => period.toLowerCase().includes(k));
 
 export default function Experience() {
-  const gridRef = useRef<HTMLDivElement>(null);
   const [expandedSet, setExpandedSet] = useState<Set<string>>(new Set());
-  const [minHeight, setMinHeight] = useState<number | undefined>(undefined);
-
-  const noneExpanded = expandedSet.size === 0;
-
-  const measure = () => {
-    if (!gridRef.current) return;
-    const cards = Array.from(gridRef.current.children) as HTMLElement[];
-    if (cards.length === 0) return;
-    cards.forEach((c) => (c.style.minHeight = '0'));
-    const max = Math.max(...cards.map((c) => c.offsetHeight));
-    cards.forEach((c) => (c.style.minHeight = ''));
-    setMinHeight(max);
-  };
-
-  // Misurazione iniziale: aspetta che i font siano caricati per avere altezze corrette.
-  useLayoutEffect(() => {
-    if (!noneExpanded) return;
-    measure();
-    if (typeof document !== 'undefined' && document.fonts?.ready) {
-      document.fonts.ready.then(() => {
-        if (noneExpanded) measure();
-      });
-    }
-  }, [noneExpanded]);
-
-  // Rimisura al cambio di viewport o di contenuto tramite ResizeObserver (più affidabile di window.resize).
-  useEffect(() => {
-    if (!gridRef.current) return;
-    const obs = new ResizeObserver(() => {
-      if (noneExpanded) measure();
-    });
-    obs.observe(gridRef.current);
-    Array.from(gridRef.current.children).forEach((c) => obs.observe(c));
-    return () => obs.disconnect();
-  }, [noneExpanded]);
 
   const toggle = (company: string) => {
     setExpandedSet((prev) => {
@@ -65,14 +29,13 @@ export default function Experience() {
       title="Esperienza"
       subtitle="Il mio percorso professionale nello sviluppo web e mobile."
     >
-      <Grid ref={gridRef}>
+      <Grid>
         {experiences.map((exp) => (
           <ExperienceCard
             key={exp.company}
             exp={exp}
             expanded={expandedSet.has(exp.company)}
             onToggle={() => toggle(exp.company)}
-            minHeight={minHeight}
           />
         ))}
       </Grid>
@@ -84,10 +47,9 @@ interface CardProps {
   exp: (typeof experiences)[number];
   expanded: boolean;
   onToggle: () => void;
-  minHeight: number | undefined;
 }
 
-function ExperienceCard({ exp, expanded, onToggle, minHeight }: CardProps) {
+function ExperienceCard({ exp, expanded, onToggle }: CardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const detailsId = useId();
 
@@ -96,31 +58,30 @@ function ExperienceCard({ exp, expanded, onToggle, minHeight }: CardProps) {
     !!exp.methodology ||
     (exp.highlights && exp.highlights.length > 0);
 
-  const previewResponsibilities = exp.responsibilities.slice(0, RESPONSIBILITIES_PREVIEW);
+  const previewResponsibilities = exp.responsibilities.slice(
+    0,
+    RESPONSIBILITIES_PREVIEW,
+  );
   const extraDetails = exp.responsibilities.slice(RESPONSIBILITIES_PREVIEW);
-
   const ongoing = isOngoing(exp.period);
+  const hasExtraSections =
+    !!exp.methodology || !!(exp.highlights && exp.highlights.length > 0);
 
-  // Mantiene visibile la card cliccata (evita di perdere il contesto quando si espande).
   const handleToggle = () => {
     onToggle();
     requestAnimationFrame(() => {
-      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      cardRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   };
 
-  const hasExtraSections = !!exp.methodology || !!(exp.highlights && exp.highlights.length > 0);
-
   return (
-    <Card
-      ref={cardRef}
-      style={minHeight ? { minHeight: `${minHeight}px` } : undefined}
-    >
+    <Card ref={cardRef} $expanded={expanded}>
       <CardTop>
         <PeriodBadge $ongoing={ongoing}>
           {ongoing && <OngoingDot aria-hidden="true" />}
           {exp.period}
         </PeriodBadge>
+
         <CardHeader>
           <Company>{exp.company}</Company>
           <RoleLine>
@@ -138,22 +99,23 @@ function ExperienceCard({ exp, expanded, onToggle, minHeight }: CardProps) {
             <ResponsibilitiesGroup>
               <List>
                 {previewResponsibilities.map((r, i) => (
-                  <li key={`p-${i}`}>{r}</li>
+                  <li key={i}>{r}</li>
                 ))}
               </List>
+
               <AnimatePresence initial={false}>
                 {expanded && extraDetails.length > 0 && (
                   <ExpandRegion
                     key="extra-list"
                     id={`${detailsId}-list`}
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
+                    animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
                     <List>
                       {extraDetails.map((r, i) => (
-                        <li key={`e-${i}`}>{r}</li>
+                        <li key={i}>{r}</li>
                       ))}
                     </List>
                   </ExpandRegion>
@@ -169,9 +131,9 @@ function ExperienceCard({ exp, expanded, onToggle, minHeight }: CardProps) {
               key="extra-sections"
               id={`${detailsId}-sections`}
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
+              animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <ExpandInner>
                 {exp.methodology && (
@@ -243,7 +205,7 @@ const Grid = styled.div`
   }
 `;
 
-const Card = styled.div`
+const Card = styled.div<{ $expanded: boolean }>`
   position: relative;
   background: ${theme.colors.surface};
   border: 1px solid ${theme.colors.border};
@@ -252,11 +214,12 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-height: ${({ $expanded }) => ($expanded ? "none" : "480px")};
   transition: border-color ${theme.transitions.default};
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -296,9 +259,12 @@ const PeriodBadge = styled.span<{ $ongoing: boolean }>`
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: ${({ $ongoing }) => ($ongoing ? theme.colors.accent : theme.colors.muted)};
+  color: ${({ $ongoing }) =>
+    $ongoing ? theme.colors.accent : theme.colors.muted};
   background: ${theme.colors.surfaceAlt};
-  border: 1px solid ${({ $ongoing }) => ($ongoing ? theme.colors.borderMid : theme.colors.border)};
+  border: 1px solid
+    ${({ $ongoing }) =>
+      $ongoing ? theme.colors.borderMid : theme.colors.border};
   border-radius: 20px;
   padding: 4px 12px;
 `;
@@ -308,9 +274,8 @@ const OngoingDot = styled.span`
   height: 7px;
   border-radius: 50%;
   background: #6fae6f;
-  box-shadow: 0 0 0 0 rgba(111, 174, 111, 0.6);
-  animation: pulse 2s infinite;
   flex-shrink: 0;
+  animation: pulse 2s infinite;
 
   @keyframes pulse {
     0% {
@@ -405,7 +370,7 @@ const List = styled.ul`
     line-height: 1.55;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       top: 0.65em;
@@ -487,7 +452,9 @@ const TechTag = styled.span`
   border-radius: 20px;
   padding: 3px 10px;
   background: ${theme.colors.surfaceAlt};
-  transition: border-color ${theme.transitions.default}, color ${theme.transitions.default};
+  transition:
+    border-color ${theme.transitions.default},
+    color ${theme.transitions.default};
 
   &:hover {
     border-color: ${theme.colors.borderMid};
@@ -508,8 +475,11 @@ const ToggleBtn = styled.button`
   border: 1px solid ${theme.colors.border};
   border-radius: 6px;
   background: transparent;
-  transition: color ${theme.transitions.default}, border-color ${theme.transitions.default}, background ${theme.transitions.default};
   width: 100%;
+  transition:
+    color ${theme.transitions.default},
+    border-color ${theme.transitions.default},
+    background ${theme.transitions.default};
 
   &:hover {
     color: ${theme.colors.accent};
