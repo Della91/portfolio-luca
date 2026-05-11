@@ -4,6 +4,7 @@ import PageContainer from '../layout/PageContainer';
 import ProfileAvatar from '../ProfileAvatar';
 import { profile } from '../../data/profile';
 import { theme } from '../../styles/theme';
+import { BaseCard } from '../ui/BaseCard';
 
 export default function About() {
   return (
@@ -12,7 +13,7 @@ export default function About() {
         <Left>
           <Card>
             <AboutPhotoFrame>
-            <ProfileAvatar fill borderRadius="8px" />
+            <ProfileAvatar />
           </AboutPhotoFrame>
             <ProfileName>
               <em>Luca</em> Della Vecchia
@@ -111,14 +112,11 @@ const Right = styled.div`
 const AboutPhotoFrame = styled.div`
   width: 100%;
   aspect-ratio: 3 / 4;
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   overflow: hidden;
 `;
 
-const Card = styled.div`
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: 10px;
+const Card = styled(BaseCard)`
   padding: 24px 20px;
   display: flex;
   flex-direction: column;

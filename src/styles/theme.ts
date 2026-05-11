@@ -20,6 +20,14 @@ export const theme = {
   transitions: {
     default: "0.2s ease",
   },
+  radii: {
+    sm: '6px',
+    md: '8px',
+    card: '10px',
+    cardLg: '12px',
+    panel: '14px',
+    pill: '20px',
+  },
 };
 
 export type Theme = typeof theme;

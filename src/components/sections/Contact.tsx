@@ -3,6 +3,7 @@ import { FiLinkedin, FiGithub, FiMail, FiPhone } from 'react-icons/fi';
 import PageContainer from '../layout/PageContainer';
 import { contactLinks } from '../../data/contact';
 import { theme } from '../../styles/theme';
+import { BaseCard } from '../ui/BaseCard';
 
 const iconMap = {
   linkedin: FiLinkedin,
@@ -56,10 +57,12 @@ const Cards = styled.div`
   }
 `;
 
-const ContactCard = styled.a`
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: 12px;
+const ContactCard = styled(BaseCard).attrs({ as: 'a' })<{
+  href?: string;
+  target?: string;
+  rel?: string;
+}>`
+  border-radius: ${theme.radii.cardLg};
   padding: 28px 20px;
   display: flex;
   flex-direction: column;
@@ -69,7 +72,6 @@ const ContactCard = styled.a`
   transition: border-color ${theme.transitions.default}, background ${theme.transitions.default};
 
   &:hover {
-    border-color: ${theme.colors.borderMid};
     background: ${theme.colors.surfaceAlt};
   }
 `;

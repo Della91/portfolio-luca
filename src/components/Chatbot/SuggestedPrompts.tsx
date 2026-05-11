@@ -53,7 +53,7 @@ const Chip = styled.button`
   color: ${theme.colors.text};
   background: ${theme.colors.surfaceAlt};
   border: 1px solid ${theme.colors.border};
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   padding: 10px 12px;
   line-height: 1.4;
   transition:

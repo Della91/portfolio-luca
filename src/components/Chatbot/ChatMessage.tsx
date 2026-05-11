@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import { Fragment } from 'react';
 import { theme } from '../../styles/theme';
-import type { MessageRole } from './useChat';
+import type { MessageRole } from '../../hooks/useChat';
 
 interface Props {
   role: MessageRole;
@@ -80,7 +80,7 @@ const Bubble = styled.div<{ $role: MessageRole }>`
 const Content = styled.div<{ $role: MessageRole }>`
   max-width: 88%;
   padding: 10px 14px;
-  border-radius: 12px;
+  border-radius: ${theme.radii.cardLg};
   background: ${({ $role }) =>
     $role === 'user' ? theme.colors.surface : theme.colors.surfaceAlt};
   border: 1px solid
