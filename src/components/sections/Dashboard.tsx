@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ProfileAvatar from '../ProfileAvatar';
 import { profile } from '../../data/profile';
-import { quickLinks, socialLinks } from '../../data/dashboard';
+import { quickLinks, socialLinks } from '../../data/dashboard.tsx';
 import { theme } from '../../styles/theme';
 import { BaseCard } from '../ui/BaseCard';
 
