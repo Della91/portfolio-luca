@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import ChatButton from './ChatButton';
-import ChatPanel, { type ChatPanelHandle } from './ChatPanel';
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import ChatButton from "./ChatButton";
+import ChatPanel, { type ChatPanelHandle } from "./ChatPanel";
 
 /**
  * Container globale del chatbot. Gestisce lo stato open/close e

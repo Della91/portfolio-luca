@@ -1,6 +1,6 @@
-import { profile } from '../data/profile';
-import { skillCategories } from '../data/skills';
-import { experiences } from '../data/experience';
+import { profile } from "../data/profile";
+import { skillCategories } from "../data/skills";
+import { experiences } from "../data/experience";
 
 /**
  * Costruisce il system prompt per l'assistente "Chiedi a Luca".
@@ -27,13 +27,13 @@ export function buildSystemPrompt(): string {
 - Telefono: ${profile.phone}
 - LinkedIn: ${profile.linkedin}
 - GitHub: ${profile.github}
-- Aperto al lavoro da remoto: ${profile.remoteOpen ? 'Sì' : 'No'}
+- Aperto al lavoro da remoto: ${profile.remoteOpen ? "Sì" : "No"}
 
 ## Bio
-${profile.bio.map((p) => `- ${p}`).join('\n')}
+${profile.bioFull.map((p) => `- ${p}`).join("\n")}
 
 ## Lingue
-${profile.languages.map((l) => `- ${l.name}: ${l.level}`).join('\n')}
+${profile.languages.map((l) => `- ${l.name}: ${l.level}`).join("\n")}
 
 ## Formazione
 ${profile.education
@@ -43,14 +43,14 @@ ${profile.education
 - Istituto: ${e.institution}
 - Periodo: ${e.period}
 - Località: ${e.location}
-${e.description ? `- Descrizione: ${e.description.replace(/\n+/g, ' ')}` : ''}`
+${e.description ? `- Descrizione: ${e.description.replace(/\n+/g, " ")}` : ""}`,
   )
-  .join('\n\n')}
+  .join("\n\n")}
 
 # COMPETENZE TECNICHE
 ${skillCategories
-  .map((cat) => `## ${cat.title}\n${cat.items.map((i) => `- ${i}`).join('\n')}`)
-  .join('\n\n')}
+  .map((cat) => `## ${cat.title}\n${cat.items.map((i) => `- ${i}`).join("\n")}`)
+  .join("\n\n")}
 
 # ESPERIENZE PROFESSIONALI
 ${experiences
@@ -59,22 +59,23 @@ ${experiences
 - Periodo: ${exp.period}
 - Località: ${exp.location}
 - Descrizione: ${exp.description}
+- Tecnologie: ${exp.technologies.join(", ")}
 
 ### Attività principali
-${exp.responsibilities.map((r) => `- ${r}`).join('\n')}
+${exp.responsibilities.map((r) => `- ${r}`).join("\n")}
 ${
   exp.methodology
-    ? `\n### Metodologia di lavoro\n${exp.methodology.replace(/\n+/g, ' ')}`
-    : ''
+    ? `\n### Metodologia di lavoro\n${exp.methodology.replace(/\n+/g, " ")}`
+    : ""
 }
 ${
   exp.highlights && exp.highlights.length > 0
     ? `\n### Features implementate\n${exp.highlights
         .map((h) => `- **${h.label}**: ${h.description}`)
-        .join('\n')}`
-    : ''
-}`
+        .join("\n")}`
+    : ""
+}`,
   )
-  .join('\n\n---\n\n')}
+  .join("\n\n---\n\n")}
 `;
 }

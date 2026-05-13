@@ -1,6 +1,6 @@
 // Costanti condivise dalle Vercel Functions del progetto.
 
-export const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
+export const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
 
 export const MAX_OUTPUT_TOKENS = 512;
 

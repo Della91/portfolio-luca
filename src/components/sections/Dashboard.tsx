@@ -1,80 +1,10 @@
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { FiLinkedin, FiGithub, FiMail, FiTool, FiBriefcase, FiUser } from 'react-icons/fi';
-import { type ReactElement } from 'react';
-import ProfileAvatar from '../ProfileAvatar';
-import { profile } from '../../data/profile';
-import { theme } from '../../styles/theme';
-
-interface QuickLink {
-  to: string;
-  title: string;
-  description: string;
-  cta: string;
-  icon: ReactElement;
-}
-
-const quickLinks: QuickLink[] = [
-  {
-    to: '/about',
-    title: 'Profilo',
-    description: 'Scopri chi sono, la mia formazione e le mie lingue.',
-    cta: 'Vedi profilo',
-    icon: <FiUser size={20} />,
-  },
-  {
-    to: '/skills',
-    title: 'Competenze',
-    description: 'Esplora le mie principali competenze e strumenti.',
-    cta: 'Vedi competenze',
-    icon: <FiTool size={20} />,
-  },
-  {
-    to: '/experience',
-    title: 'Esperienza',
-    description: 'Scopri il mio percorso professionale come sviluppatore.',
-    cta: 'Vedi esperienza',
-    icon: <FiBriefcase size={20} />,
-  },
-  {
-    to: '/contact',
-    title: 'Contatti',
-    description: 'Collegati con me tramite LinkedIn, GitHub o email.',
-    cta: 'Vedi contatti',
-    icon: <FiMail size={20} />,
-  },
-];
-
-interface SocialLink {
-  href: string;
-  label: string;
-  value: string;
-  icon: ReactElement;
-  external?: boolean;
-}
-
-const socialLinks: SocialLink[] = [
-  {
-    href: profile.linkedin,
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/luca-della-vecchia',
-    icon: <FiLinkedin size={14} />,
-    external: true,
-  },
-  {
-    href: profile.github,
-    label: 'GitHub',
-    value: 'github.com/lucadellavecchia',
-    icon: <FiGithub size={14} />,
-    external: true,
-  },
-  {
-    href: `mailto:${profile.email}`,
-    label: 'Email',
-    value: profile.email,
-    icon: <FiMail size={14} />,
-  },
-];
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import ProfileAvatar from "../ProfileAvatar";
+import { profile } from "../../data/profile";
+import { quickLinks, socialLinks } from "../../data/dashboard.tsx";
+import { theme } from "../../styles/theme";
+import { BaseCard } from "../ui/BaseCard";
 
 export default function Dashboard() {
   return (
@@ -87,6 +17,9 @@ export default function Dashboard() {
             {profile.bio.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
+            <ReadMoreLink to="/about">
+              Continua a leggere il profilo &rsaquo;
+            </ReadMoreLink>
           </BioParagraphs>
 
           <ContactRow>
@@ -94,7 +27,7 @@ export default function Dashboard() {
               <ContactLink
                 key={label}
                 href={href}
-                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
                 <ContactIcon>{icon}</ContactIcon>
                 <ContactMeta>
@@ -187,6 +120,23 @@ const BioParagraphs = styled.div`
   }
 `;
 
+const ReadMoreLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: ${theme.colors.accent};
+  letter-spacing: 0.04em;
+  border-bottom: 1px dashed ${theme.colors.borderMid};
+  padding-bottom: 2px;
+  transition: border-color ${theme.transitions.default}, color ${theme.transitions.default};
+
+  &:hover {
+    border-bottom-color: ${theme.colors.accent};
+  }
+`;
+
 const ContactRow = styled.div`
   display: flex;
   flex-direction: column;
@@ -200,7 +150,7 @@ const ContactLink = styled.a`
   gap: 12px;
   padding: 10px 14px;
   border: 1px solid ${theme.colors.border};
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   background: ${theme.colors.surfaceAlt};
   transition: border-color ${theme.transitions.default}, background ${theme.transitions.default};
 
@@ -216,7 +166,7 @@ const ContactIcon = styled.span`
   justify-content: center;
   width: 30px;
   height: 30px;
-  border-radius: 6px;
+  border-radius: ${theme.radii.sm};
   background: ${theme.colors.surface};
   border: 1px solid ${theme.colors.border};
   color: ${theme.colors.accent};
@@ -248,7 +198,7 @@ const ExploreBtn = styled.button`
   margin-top: 8px;
   padding: 12px 28px;
   border: 1px solid ${theme.colors.borderMid};
-  border-radius: 6px;
+  border-radius: ${theme.radii.sm};
   color: ${theme.colors.accent};
   font-size: 0.88rem;
   letter-spacing: 0.05em;
@@ -263,7 +213,7 @@ const ExploreBtn = styled.button`
 
 const PhotoColumn = styled.div`
   position: relative;
-  border-radius: 12px;
+  border-radius: ${theme.radii.cardLg};
   border: 1px solid ${theme.colors.border};
   overflow: hidden;
   min-height: 600px;
@@ -311,25 +261,17 @@ const QuickCards = styled.div`
   }
 `;
 
-const QuickCard = styled.div`
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: 10px;
+const QuickCard = styled(BaseCard)`
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: border-color ${theme.transitions.default};
-
-  &:hover {
-    border-color: ${theme.colors.borderMid};
-  }
 `;
 
 const QuickCardIcon = styled.div`
   width: 42px;
   height: 42px;
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   background: ${theme.colors.surfaceAlt};
   border: 1px solid ${theme.colors.border};
   display: flex;

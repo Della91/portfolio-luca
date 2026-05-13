@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react';
-import styled from 'styled-components';
-import { theme } from '../../styles/theme';
+import { type ReactNode } from "react";
+import styled from "styled-components";
+import { theme } from "../../styles/theme";
 
 interface Props {
   title: string;

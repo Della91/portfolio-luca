@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import PageContainer from '../layout/PageContainer';
-import { skillCategories } from '../../data/skills';
-import { theme } from '../../styles/theme';
+import styled from "styled-components";
+import PageContainer from "../layout/PageContainer";
+import { skillCategories } from "../../data/skills";
+import { theme } from "../../styles/theme";
+import { BaseCard } from "../ui/BaseCard";
 
 export default function Skills() {
   return (
@@ -39,16 +40,8 @@ const Grid = styled.div`
   }
 `;
 
-const Card = styled.div`
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: 10px;
+const Card = styled(BaseCard)`
   padding: 24px 20px;
-  transition: border-color ${theme.transitions.default};
-
-  &:hover {
-    border-color: ${theme.colors.borderMid};
-  }
 `;
 
 const CardTitle = styled.h3`

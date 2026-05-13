@@ -1,9 +1,10 @@
-import styled from 'styled-components';
-import { FiMapPin, FiMail, FiPhone, FiMonitor } from 'react-icons/fi';
-import PageContainer from '../layout/PageContainer';
-import ProfileAvatar from '../ProfileAvatar';
-import { profile } from '../../data/profile';
-import { theme } from '../../styles/theme';
+import styled from "styled-components";
+import { FiMapPin, FiMail, FiPhone, FiMonitor } from "react-icons/fi";
+import PageContainer from "../layout/PageContainer";
+import ProfileAvatar from "../ProfileAvatar";
+import { profile } from "../../data/profile";
+import { theme } from "../../styles/theme";
+import { BaseCard } from "../ui/BaseCard";
 
 export default function About() {
   return (
@@ -12,7 +13,7 @@ export default function About() {
         <Left>
           <Card>
             <AboutPhotoFrame>
-            <ProfileAvatar fill borderRadius="8px" />
+            <ProfileAvatar />
           </AboutPhotoFrame>
             <ProfileName>
               <em>Luca</em> Della Vecchia
@@ -30,7 +31,7 @@ export default function About() {
               </InfoItem>
               <InfoItem>
                 <FiPhone size={13} />
-                <a href={`tel:+39${profile.phone.replace(/\s/g, '')}`}>{profile.phone}</a>
+                <a href={`tel:+39${profile.phone.replace(/\s/g, "")}`}>{profile.phone}</a>
               </InfoItem>
               {profile.remoteOpen && (
                 <InfoItem>
@@ -58,7 +59,7 @@ export default function About() {
           <Card>
             <SectionLabel>Profilo</SectionLabel>
             <BioBlock>
-              {profile.bio.map((p, i) => (
+              {profile.bioFull.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </BioBlock>
@@ -111,14 +112,11 @@ const Right = styled.div`
 const AboutPhotoFrame = styled.div`
   width: 100%;
   aspect-ratio: 3 / 4;
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   overflow: hidden;
 `;
 
-const Card = styled.div`
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: 10px;
+const Card = styled(BaseCard)`
   padding: 24px 20px;
   display: flex;
   flex-direction: column;

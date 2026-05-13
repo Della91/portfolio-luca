@@ -1,19 +1,19 @@
 import {
   forwardRef,
-  useEffect,
   useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
   type FormEvent,
-} from 'react';
-import { motion } from 'framer-motion';
-import styled from 'styled-components';
-import { FiRefreshCw, FiSend, FiX } from 'react-icons/fi';
-import { theme } from '../../styles/theme';
-import ChatMessage from './ChatMessage';
-import SuggestedPrompts from './SuggestedPrompts';
-import { useChat } from './useChat';
+} from "react";
+import { motion } from "framer-motion";
+import styled from "styled-components";
+import { FiRefreshCw, FiSend, FiX } from "react-icons/fi";
+import { theme } from "../../styles/theme";
+import ChatMessage from "./ChatMessage";
+import SuggestedPrompts from "./SuggestedPrompts";
+import { useChat } from "../../hooks/useChat";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 interface Props {
   open: boolean;
@@ -31,7 +31,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
   ref,
 ) {
   const { messages, streamingText, isLoading, error, sendMessage, reset } = useChat();
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -45,26 +45,18 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages, streamingText, error]);
 
-  // Esc chiude il pannello.
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  useEscapeKey(open, onClose);
 
   const handleSubmit = (e?: FormEvent) => {
     e?.preventDefault();
     const text = input.trim();
     if (!text || isLoading) return;
-    setInput('');
+    setInput("");
     void sendMessage(text);
   };
 
   const handleSelectPrompt = (prompt: string) => {
-    setInput('');
+    setInput("");
     void sendMessage(prompt);
   };
 
@@ -78,7 +70,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
       initial={{ opacity: 0, y: 12, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 12, scale: 0.98 }}
-      transition={{ duration: 0.18, ease: 'easeOut' }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
     >
       <Header>
         <HeaderText>
@@ -131,7 +123,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
           value={input}
           onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               handleSubmit();
             }
@@ -167,7 +159,7 @@ const Panel = styled(motion.div)`
   flex-direction: column;
   background: ${theme.colors.surface};
   border: 1px solid ${theme.colors.borderMid};
-  border-radius: 14px;
+  border-radius: ${theme.radii.panel};
   box-shadow: 0 16px 48px ${theme.colors.shadow};
   overflow: hidden;
   z-index: 1000;
@@ -225,7 +217,7 @@ const IconBtn = styled.button`
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: ${theme.radii.sm};
   color: ${theme.colors.muted};
   transition:
     color ${theme.transitions.default},
@@ -268,7 +260,7 @@ const ErrorBanner = styled.div`
   font-size: 0.78rem;
   color: ${theme.colors.text};
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   background: rgba(160, 60, 60, 0.18);
   border: 1px solid rgba(190, 90, 90, 0.4);
   line-height: 1.5;
@@ -295,7 +287,7 @@ const TextArea = styled.textarea`
   color: ${theme.colors.text};
   background: ${theme.colors.surfaceAlt};
   border: 1px solid ${theme.colors.border};
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   outline: none;
   transition: border-color ${theme.transitions.default};
 
@@ -319,7 +311,7 @@ const SendBtn = styled.button`
   justify-content: center;
   width: 38px;
   height: 38px;
-  border-radius: 8px;
+  border-radius: ${theme.radii.md};
   background: ${theme.colors.accent};
   color: ${theme.colors.bg};
   transition:
