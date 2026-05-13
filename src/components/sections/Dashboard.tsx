@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import ProfileAvatar from '../ProfileAvatar';
-import { profile } from '../../data/profile';
-import { quickLinks, socialLinks } from '../../data/dashboard.tsx';
-import { theme } from '../../styles/theme';
-import { BaseCard } from '../ui/BaseCard';
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import ProfileAvatar from "../ProfileAvatar";
+import { profile } from "../../data/profile";
+import { quickLinks, socialLinks } from "../../data/dashboard.tsx";
+import { theme } from "../../styles/theme";
+import { BaseCard } from "../ui/BaseCard";
 
 export default function Dashboard() {
   return (
@@ -17,6 +17,9 @@ export default function Dashboard() {
             {profile.bio.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
+            <ReadMoreLink to="/about">
+              Continua a leggere il profilo &rsaquo;
+            </ReadMoreLink>
           </BioParagraphs>
 
           <ContactRow>
@@ -24,7 +27,7 @@ export default function Dashboard() {
               <ContactLink
                 key={label}
                 href={href}
-                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
                 <ContactIcon>{icon}</ContactIcon>
                 <ContactMeta>
@@ -114,6 +117,23 @@ const BioParagraphs = styled.div`
     font-size: 0.88rem;
     color: ${theme.colors.muted};
     line-height: 1.7;
+  }
+`;
+
+const ReadMoreLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: ${theme.colors.accent};
+  letter-spacing: 0.04em;
+  border-bottom: 1px dashed ${theme.colors.borderMid};
+  padding-bottom: 2px;
+  transition: border-color ${theme.transitions.default}, color ${theme.transitions.default};
+
+  &:hover {
+    border-bottom-color: ${theme.colors.accent};
   }
 `;
 
