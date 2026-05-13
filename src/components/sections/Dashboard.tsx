@@ -220,7 +220,11 @@ const PhotoColumn = styled.div`
   background: ${theme.colors.surface};
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    min-height: 420px;
+    min-height: unset;
+    aspect-ratio: 4 / 5;
+    max-width: 440px;
+    width: 100%;
+    margin: 0 auto;
   }
 `;
 
