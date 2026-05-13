@@ -5,8 +5,8 @@ export const profile = {
   phone: "388 386 3769",
   location: "Colleferro, RM",
   remoteOpen: true,
-  linkedin: "https://linkedin.com/in/luca-della-vecchia",
-  github: "https://github.com/lucadellavecchia",
+  linkedin: "https://www.linkedin.com/in/luca-della-vecchia-b8ab721a9/",
+  github: "https://github.com/Della91/portfolio-luca",
 
   bio: [
     "Frontend Developer con esperienza nello sviluppo di applicazioni web e mobile utilizzando React, TypeScript e React Native.",

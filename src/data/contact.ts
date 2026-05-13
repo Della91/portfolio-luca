@@ -9,13 +9,13 @@ export const contactLinks: ContactLink[] = [
   {
     label: "LinkedIn",
     value: "linkedin.com/in/luca-della-vecchia",
-    url: "https://linkedin.com/in/luca-della-vecchia",
+    url: "https://www.linkedin.com/in/luca-della-vecchia-b8ab721a9/",
     icon: "linkedin",
   },
   {
     label: "GitHub",
     value: "github.com/lucadellavecchia",
-    url: "https://github.com/lucadellavecchia",
+    url: "https://github.com/Della91/portfolio-luca",
     icon: "github",
   },
   {
