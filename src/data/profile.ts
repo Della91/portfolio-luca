@@ -18,8 +18,8 @@ export const profile = {
     "Frontend Developer con esperienza nello sviluppo di applicazioni web e mobile utilizzando React, TypeScript e React Native.",
     "Ho un approccio pratico alla risoluzione dei problemi e mi piace affrontare nuove sfide tecniche, imparando rapidamente strumenti e tecnologie quando necessario.",
     "Nel mio lavoro mi concentro sulla creazione di interfacce chiare, codice riutilizzabile e soluzioni scalabili, collaborando con il team per migliorare continuamente la qualità del prodotto.",
-    "Questo portfolio include un chatbot AI integrato, sviluppato utilizzando le API di Anthropic (Claude) con streaming delle risposte via SSE e deploy su Vercel tramite una Serverless Function.",
     "Credo che la differenza non stia solo nelle tecnologie conosciute, ma soprattutto nella capacità di analizzare i problemi e trovare soluzioni efficaci.",
+    "Questo portfolio include un chatbot AI integrato, sviluppato utilizzando le API di Anthropic (Claude) con streaming delle risposte via SSE e deploy su Vercel tramite una Serverless Function.",
   ],
 
   languages: [
