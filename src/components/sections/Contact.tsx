@@ -15,7 +15,7 @@ const iconMap = {
 export default function Contact() {
   return (
     <PageContainer
-      title="Get in Touch"
+      title="Contatti"
       subtitle="Hai domande o proposte? Sentiti libero di contattarmi."
     >
       <Cards>
@@ -38,6 +38,13 @@ export default function Contact() {
           );
         })}
       </Cards>
+
+      <AvailabilityBlock>
+        <AvailabilityDot />
+        <AvailabilityText>
+          Attualmente disponibile per nuove opportunità lavorative da remoto.
+        </AvailabilityText>
+      </AvailabilityBlock>
     </PageContainer>
   );
 }
@@ -91,4 +98,40 @@ const CardValue = styled.p`
   color: ${theme.colors.muted};
   letter-spacing: 0.03em;
   word-break: break-all;
+`;
+
+const AvailabilityBlock = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 28px;
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radii.cardLg};
+  background: ${theme.colors.surface};
+`;
+
+const AvailabilityDot = styled.span`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6fae6f;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(111, 174, 111, 0.55); }
+    70% { box-shadow: 0 0 0 6px rgba(111, 174, 111, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(111, 174, 111, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+const AvailabilityText = styled.p`
+  font-size: 0.88rem;
+  color: ${theme.colors.muted};
+  line-height: 1.5;
 `;
