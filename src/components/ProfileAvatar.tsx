@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import photo1 from "../assets/photo-1.png"; // dritto / center
-import photo2 from "../assets/photo-2.png"; // sinistra
-import photo3 from "../assets/photo-3.png"; // destra (forte)
-import photo4 from "../assets/photo-4.png"; // su
-import photo5 from "../assets/photo-5.png"; // giù (centro)
-import photo6 from "../assets/photo-6.png"; // sinistra-alto
-import photo7 from "../assets/photo-7.png"; // sinistra (moderata)
-import photo8 from "../assets/photo-8.png"; // basso-sinistra
-import photo9 from "../assets/photo-9.png"; // basso-destra
+import photo1 from "../assets/photo-1.webp"; // dritto / center
+import photo2 from "../assets/photo-2.webp"; // sinistra
+import photo3 from "../assets/photo-3.webp"; // destra (forte)
+import photo4 from "../assets/photo-4.webp"; // su
+import photo5 from "../assets/photo-5.webp"; // giù (centro)
+import photo6 from "../assets/photo-6.webp"; // sinistra-alto
+import photo7 from "../assets/photo-7.webp"; // sinistra (moderata)
+import photo8 from "../assets/photo-8.webp"; // basso-sinistra
+import photo9 from "../assets/photo-9.webp"; // basso-destra
 
 type Zone =
   | "center"
