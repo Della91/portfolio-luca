@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { theme } from '../../styles/theme';
+import styled from "styled-components";
+import { theme } from "../../styles/theme";
 
 interface Props {
   onSelect: (prompt: string) => void;
@@ -7,10 +7,11 @@ interface Props {
 }
 
 const SUGGESTIONS = [
-  'Quali sono le sue competenze principali in React?',
-  'Ha esperienza con app mobile native?',
-  'Su che progetti ha lavorato di recente?',
-  'Come lo descriveresti in tre frasi?',
+  "Quali sono le sue competenze principali in React?",
+  "Ha esperienza con app mobile native?",
+  "Su che progetti ha lavorato di recente?",
+  "Come lo descriveresti in tre frasi?",
+  "Come ha integrato l'AI in questo portfolio?",
 ];
 
 export default function SuggestedPrompts({ onSelect, disabled = false }: Props) {

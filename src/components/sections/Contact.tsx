@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import { FiLinkedin, FiGithub, FiMail, FiPhone } from 'react-icons/fi';
-import PageContainer from '../layout/PageContainer';
-import { contactLinks } from '../../data/contact';
-import { theme } from '../../styles/theme';
-import { BaseCard } from '../ui/BaseCard';
+import styled from "styled-components";
+import { FiLinkedin, FiGithub, FiMail, FiPhone } from "react-icons/fi";
+import PageContainer from "../layout/PageContainer";
+import { contactLinks } from "../../data/contact";
+import { theme } from "../../styles/theme";
+import { BaseCard } from "../ui/BaseCard";
 
 const iconMap = {
   linkedin: FiLinkedin,
@@ -21,13 +21,13 @@ export default function Contact() {
       <Cards>
         {contactLinks.map(({ label, value, url, icon }) => {
           const Icon = iconMap[icon];
-          const isExternal = icon === 'linkedin' || icon === 'github';
+          const isExternal = icon === "linkedin" || icon === "github";
           return (
             <ContactCard
               key={label}
               href={url}
-              target={isExternal ? '_blank' : undefined}
-              rel={isExternal ? 'noopener noreferrer' : undefined}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
             >
               <IconWrapper>
                 <Icon size={24} />
@@ -57,7 +57,7 @@ const Cards = styled.div`
   }
 `;
 
-const ContactCard = styled(BaseCard).attrs({ as: 'a' })<{
+const ContactCard = styled(BaseCard).attrs({ as: "a" })<{
   href?: string;
   target?: string;
   rel?: string;

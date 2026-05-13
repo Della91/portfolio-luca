@@ -5,15 +5,15 @@ import {
   useRef,
   useState,
   type FormEvent,
-} from 'react';
-import { motion } from 'framer-motion';
-import styled from 'styled-components';
-import { FiRefreshCw, FiSend, FiX } from 'react-icons/fi';
-import { theme } from '../../styles/theme';
-import ChatMessage from './ChatMessage';
-import SuggestedPrompts from './SuggestedPrompts';
-import { useChat } from '../../hooks/useChat';
-import { useEscapeKey } from '../../hooks/useEscapeKey';
+} from "react";
+import { motion } from "framer-motion";
+import styled from "styled-components";
+import { FiRefreshCw, FiSend, FiX } from "react-icons/fi";
+import { theme } from "../../styles/theme";
+import ChatMessage from "./ChatMessage";
+import SuggestedPrompts from "./SuggestedPrompts";
+import { useChat } from "../../hooks/useChat";
+import { useEscapeKey } from "../../hooks/useEscapeKey";
 
 interface Props {
   open: boolean;
@@ -31,7 +31,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
   ref,
 ) {
   const { messages, streamingText, isLoading, error, sendMessage, reset } = useChat();
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -51,12 +51,12 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
     e?.preventDefault();
     const text = input.trim();
     if (!text || isLoading) return;
-    setInput('');
+    setInput("");
     void sendMessage(text);
   };
 
   const handleSelectPrompt = (prompt: string) => {
-    setInput('');
+    setInput("");
     void sendMessage(prompt);
   };
 
@@ -70,7 +70,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
       initial={{ opacity: 0, y: 12, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 12, scale: 0.98 }}
-      transition={{ duration: 0.18, ease: 'easeOut' }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
     >
       <Header>
         <HeaderText>
@@ -123,7 +123,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
           value={input}
           onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               handleSubmit();
             }

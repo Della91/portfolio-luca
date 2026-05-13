@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# Portfolio — Luca Della Vecchia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio built with React, TypeScript, and Vite. Features an AI-powered chatbot that answers questions about my experience and projects, powered by Claude (Anthropic).
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript**
+- **Vite** — build tool
+- **Styled Components** — styling
+- **Framer Motion** — animations
+- **React Router v7** — routing
+- **Claude API (Anthropic)** — AI chatbot via Vercel Serverless Function
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Responsive portfolio sections (about, skills, projects, contacts)
+- AI chatbot integrated directly in the UI — asks it anything about me
+- Streaming responses via SSE
+- Deployed on Vercel with a custom domain
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```
+src/
+├── components/
+│   ├── Chatbot/       # AI chatbot UI + logic
+│   ├── sections/      # Portfolio sections
+│   ├── layout/        # Layout components
+│   └── ui/            # Reusable UI components
+├── hooks/             # Custom React hooks
+├── lib/               # Utilities (system prompt builder, etc.)
+├── data/              # Static content
+└── types/             # TypeScript types
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+api/
+└── chat.ts            # Vercel Serverless Function — proxies requests to Anthropic
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Local Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+Create a `.env.local` file:
+
+```
+ANTHROPIC_API_KEY=your_api_key_here
+```
+
+```bash
+npm run dev
+```
+
+The Vite dev server includes a middleware that simulates the Vercel Function locally, so no Vercel CLI needed.
+
+## Deploy
+
+Deployed on **Vercel**. The `api/chat.ts` function runs as a Serverless Function with a 30s timeout to support streaming responses.
+
+Set the `ANTHROPIC_API_KEY` environment variable in the Vercel project settings before deploying.
+
+---
+
+## Note in italiano
+
+Portfolio personale sviluppato con React, TypeScript e Vite. Include un chatbot AI integrato nell'interfaccia, alimentato da Claude di Anthropic, che risponde a domande sulla mia esperienza e sui miei progetti.
+
+Il chatbot utilizza una Vercel Serverless Function come proxy verso l'API Anthropic, con supporto allo streaming delle risposte tramite SSE. In sviluppo locale, un plugin Vite personalizzato simula la funzione serverless senza necessità di Vercel CLI.

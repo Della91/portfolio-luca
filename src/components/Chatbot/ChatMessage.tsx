@@ -1,7 +1,7 @@
-import styled, { keyframes } from 'styled-components';
-import { Fragment } from 'react';
-import { theme } from '../../styles/theme';
-import type { MessageRole } from '../../hooks/useChat';
+import styled, { keyframes } from "styled-components";
+import { Fragment } from "react";
+import { theme } from "../../styles/theme";
+import type { MessageRole } from "../../hooks/useChat";
 
 interface Props {
   role: MessageRole;
@@ -14,7 +14,7 @@ interface Props {
  * Volutamente minimale per evitare dipendenze esterne.
  */
 function renderContent(content: string): React.ReactNode {
-  const lines = content.split('\n');
+  const lines = content.split("\n");
   return lines.map((line, i) => (
     <Fragment key={i}>
       {renderLine(line)}
@@ -27,7 +27,7 @@ function renderLine(line: string): React.ReactNode {
   // Riconosce i bullet "- " o "* " a inizio riga.
   const bulletMatch = /^[-*]\s+(.*)/.exec(line);
   const text = bulletMatch ? bulletMatch[1] : line;
-  const prefix = bulletMatch ? '• ' : '';
+  const prefix = bulletMatch ? "• " : "";
 
   // Spezzetta il testo in segmenti, alternando bold/non-bold.
   const segments: { bold: boolean; text: string }[] = [];
@@ -74,7 +74,7 @@ const blink = keyframes`
 const Bubble = styled.div<{ $role: MessageRole }>`
   display: flex;
   ${({ $role }) =>
-    $role === 'user' ? 'justify-content: flex-end;' : 'justify-content: flex-start;'}
+    $role === "user" ? "justify-content: flex-end;" : "justify-content: flex-start;"}
 `;
 
 const Content = styled.div<{ $role: MessageRole }>`
@@ -82,9 +82,9 @@ const Content = styled.div<{ $role: MessageRole }>`
   padding: 10px 14px;
   border-radius: ${theme.radii.cardLg};
   background: ${({ $role }) =>
-    $role === 'user' ? theme.colors.surface : theme.colors.surfaceAlt};
+    $role === "user" ? theme.colors.surface : theme.colors.surfaceAlt};
   border: 1px solid
-    ${({ $role }) => ($role === 'user' ? theme.colors.borderMid : theme.colors.border)};
+    ${({ $role }) => ($role === "user" ? theme.colors.borderMid : theme.colors.border)};
   font-size: 0.84rem;
   line-height: 1.6;
   color: ${theme.colors.text};

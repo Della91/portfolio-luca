@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import PageContainer from '../layout/PageContainer';
-import { skillCategories } from '../../data/skills';
-import { theme } from '../../styles/theme';
-import { BaseCard } from '../ui/BaseCard';
+import styled from "styled-components";
+import PageContainer from "../layout/PageContainer";
+import { skillCategories } from "../../data/skills";
+import { theme } from "../../styles/theme";
+import { BaseCard } from "../ui/BaseCard";
 
 export default function Skills() {
   return (

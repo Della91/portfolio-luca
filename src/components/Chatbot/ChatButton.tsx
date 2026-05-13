@@ -1,6 +1,6 @@
-import styled, { keyframes } from 'styled-components';
-import { FiMessageCircle } from 'react-icons/fi';
-import { theme } from '../../styles/theme';
+import styled, { keyframes } from "styled-components";
+import { FiMessageCircle } from "react-icons/fi";
+import { theme } from "../../styles/theme";
 
 interface Props {
   open: boolean;

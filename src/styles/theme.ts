@@ -14,19 +14,19 @@ export const theme = {
     serif: "'Georgia', 'Times New Roman', serif",
   },
   breakpoints: {
-    tablet: '1024px',
-    mobile: '768px',
+    tablet: "1024px",
+    mobile: "768px",
   },
   transitions: {
     default: "0.2s ease",
   },
   radii: {
-    sm: '6px',
-    md: '8px',
-    card: '10px',
-    cardLg: '12px',
-    panel: '14px',
-    pill: '20px',
+    sm: "6px",
+    md: "8px",
+    card: "10px",
+    cardLg: "12px",
+    panel: "14px",
+    pill: "20px",
   },
 };
 
