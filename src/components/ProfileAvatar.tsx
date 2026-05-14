@@ -91,7 +91,7 @@ export default function ProfileAvatar() {
       });
     };
 
-    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("mousemove", handleMove, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -119,6 +119,8 @@ const Frame = styled.div`
   overflow: hidden;
   border-radius: inherit;
   position: relative;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 `;
 
 const Photo = styled.img<{ $visible: boolean }>`
@@ -131,5 +133,6 @@ const Photo = styled.img<{ $visible: boolean }>`
   display: block;
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
   transition: opacity 0.25s ease-in-out;
-  will-change: opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 `;
