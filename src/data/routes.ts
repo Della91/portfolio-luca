@@ -9,5 +9,6 @@ export const ROUTES: RouteLink[] = [
   { to: "/about", label: "Profilo" },
   { to: "/skills", label: "Competenze" },
   { to: "/experience", label: "Esperienza" },
+  { to: "/projects", label: "Progetti" },
   { to: "/contact", label: "Contatti" },
 ];

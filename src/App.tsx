@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GlobalStyles from "./styles/GlobalStyles";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import Dashboard from "./components/sections/Dashboard";
 import About from "./components/sections/About";
-import Skills from "./components/sections/Skills";
-import Experience from "./components/sections/Experience";
 import Contact from "./components/sections/Contact";
+import Dashboard from "./components/sections/Dashboard";
+import Experience from "./components/sections/Experience";
+import Projects from "./components/sections/Projects";
+import Skills from "./components/sections/Skills";
+import GlobalStyles from "./styles/GlobalStyles";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="about" element={<About />} />
           <Route path="skills" element={<Skills />} />
           <Route path="experience" element={<Experience />} />
+          <Route path="projects" element={<Projects />} />
           <Route path="contact" element={<Contact />} />
         </Route>
       </Routes>

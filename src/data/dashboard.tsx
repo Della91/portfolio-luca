@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import {
   FiBriefcase,
+  FiCode,
   FiGithub,
   FiLinkedin,
   FiMail,
@@ -46,6 +47,13 @@ export const quickLinks: QuickLink[] = [
     description: "Scopri il mio percorso professionale come sviluppatore.",
     cta: "Vedi esperienza",
     icon: <FiBriefcase size={20} />,
+  },
+  {
+    to: "/projects",
+    title: "Progetti",
+    description: "Esplora i progetti che ho sviluppato.",
+    cta: "Vedi progetti",
+    icon: <FiCode size={20} />,
   },
   {
     to: "/contact",

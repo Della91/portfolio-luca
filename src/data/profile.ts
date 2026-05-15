@@ -6,7 +6,7 @@ export const profile = {
   location: "Colleferro, RM",
   remoteOpen: true,
   linkedin: "https://www.linkedin.com/in/luca-della-vecchia-b8ab721a9/",
-  github: "https://github.com/Della91/portfolio-luca",
+  github: "https://github.com/Della91?tab=repositories",
 
   bio: [
     "Frontend Developer con esperienza nello sviluppo di applicazioni web e mobile utilizzando React, TypeScript e React Native.",
