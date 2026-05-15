@@ -6,7 +6,6 @@ import photo3 from "../assets/photo-3.webp"; // destra (forte)
 import photo4 from "../assets/photo-4.webp"; // su
 import photo5 from "../assets/photo-5.webp"; // giù (centro)
 import photo6 from "../assets/photo-6.webp"; // sinistra-alto
-import photo7 from "../assets/photo-7.webp"; // sinistra (moderata)
 import photo8 from "../assets/photo-8.webp"; // basso-sinistra
 import photo9 from "../assets/photo-9.webp"; // basso-destra
 
@@ -16,7 +15,6 @@ type Zone =
   | "upper-left"
   | "right"
   | "left"
-  | "left-mid"
   | "down"
   | "lower-left"
   | "lower-right";
@@ -27,7 +25,6 @@ const ZONE_PHOTOS: Record<Zone, string> = {
   "upper-left": photo6,
   right: photo3,
   left: photo2,
-  "left-mid": photo7,
   down: photo5,
   "lower-left": photo8,
   "lower-right": photo9,
@@ -48,7 +45,6 @@ function getZone(nx: number, ny: number): Zone {
   // Banda centrale verticale
   if (nx > 0.3) return "right";
   if (nx < -0.45) return "left";
-  if (nx < -0.15) return "left-mid";
   return "center";
 }
 
@@ -123,7 +119,7 @@ const Frame = styled.div`
   -webkit-transform: translateZ(0);
 `;
 
-const Photo = styled.img<{ $visible: boolean }>`
+const Photo = styled.img<{ $visible: boolean; }>`
   position: absolute;
   inset: 0;
   width: 100%;
