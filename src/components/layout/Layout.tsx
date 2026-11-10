@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -6,6 +7,9 @@ import { ROUTES } from "../../data/routes";
 import { theme } from "../../styles/theme";
 import Chatbot from "../Chatbot/Chatbot";
 import Navbar from "./Navbar";
+
+// Stesso titolo di index.html, usato per la Home.
+const DEFAULT_TITLE = "Luca Della Vecchia — Frontend Developer";
 
 const pageVariants = {
   initial: { opacity: 0, y: 16 },
@@ -17,6 +21,13 @@ export default function Layout() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const currentRoute = ROUTES.find((r) => r.to === location.pathname && r.to !== "/");
+
+  // Titolo della scheda del browser per ogni pagina (es. "Esperienza — Luca Della Vecchia").
+  useEffect(() => {
+    if (isHome) document.title = DEFAULT_TITLE;
+    else if (currentRoute) document.title = `${currentRoute.label} — Luca Della Vecchia`;
+    else document.title = "Pagina non trovata";
+  }, [isHome, currentRoute]);
 
   return (
     <Wrapper>
