@@ -45,8 +45,6 @@ export const profile = {
       institution: "ITIS S. Cannizzaro",
       period: "Sett 2005 – Giu 2010",
       location: "Colleferro",
-      description:
-        "Diploma tecnico con specializzazione nel settore meccanico presso l'ITIS S. Cannizzaro di Colleferro.",
     },
   ],
 };
