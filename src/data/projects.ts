@@ -18,7 +18,7 @@ export const projects: Project[] = [
     description:
       "Portfolio sviluppato con React e TypeScript, con un chatbot AI integrato che risponde a domande sulla mia esperienza usando le API di Anthropic (Claude).",
     longDescription:
-      "Il chatbot utilizza una Vercel Serverless Function come proxy verso l'API Anthropic, con supporto allo streaming delle risposte tramite SSE. In sviluppo locale, un plugin Vite personalizzato simula la funzione serverless senza necessità di Vercel CLI. Il system prompt è generato dinamicamente a partire dai dati del profilo, così le risposte restano sempre aggiornate.",
+      "Il chatbot utilizza una Vercel Edge Function come proxy verso l'API Anthropic, con supporto allo streaming delle risposte tramite SSE. In sviluppo locale, un plugin Vite personalizzato simula la funzione senza necessità di Vercel CLI. Il system prompt è generato dinamicamente a partire dai dati del profilo, così le risposte restano sempre aggiornate.",
     technologies: [
       "React",
       "TypeScript",
@@ -26,14 +26,14 @@ export const projects: Project[] = [
       "Styled Components",
       "Framer Motion",
       "Claude API",
-      "Vercel Serverless Functions",
+      "Vercel Edge Functions",
       "SSE Streaming",
     ],
     githubUrl: "https://github.com/Della91/portfolio-luca",
     liveUrl: "https://luca-della-vecchia.vercel.app",
     highlights: [
       "Streaming risposte AI via SSE",
-      "Serverless Function con proxy verso Anthropic",
+      "Edge Function con proxy verso Anthropic",
       "Plugin Vite custom per simulare l'ambiente Vercel in locale",
       "System prompt generato dinamicamente dai dati del profilo",
     ],
