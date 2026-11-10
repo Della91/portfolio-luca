@@ -16,12 +16,11 @@ const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
 const GENERIC_ERROR = "Il servizio non è disponibile al momento. Riprova tra poco.";
 
-// x-real-ip è impostato da Vercel e non è falsificabile dal client;
-// il primo valore di x-forwarded-for invece può essere scritto da chiunque.
+// IP del visitatore, per il limite di messaggi giornaliero.
+// Su Vercel entrambe le intestazioni sono scritte da Vercel (non falsificabili): x-real-ip è la più diretta.
 function getClientIp(req: Request): string {
   const realIp = req.headers.get("x-real-ip");
   if (realIp) return realIp;
-  // Fallback: l'ultimo valore è quello aggiunto dal proxy, non dal client.
   const forwarded = req.headers.get("x-forwarded-for");
   return forwarded?.split(",").pop()?.trim() || "unknown";
 }
@@ -124,7 +123,7 @@ export default async function handler(req: Request): Promise<Response> {
         controller.enqueue(encoder.encode("data: [DONE]\n\n"));
         controller.close();
       } catch (err) {
-        // Il dettaglio va solo nei log di Vercel; al visitatore un messaggio generico.
+        // Dettaglio tecnico nei log di Vercel; al visitatore solo un messaggio generico.
         console.error("[api/chat] Errore Anthropic:", err);
         const status = err instanceof Anthropic.APIError ? err.status : undefined;
 

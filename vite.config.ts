@@ -40,7 +40,7 @@ function devChatApiPlugin(apiKey: string): Plugin {
         });
 
         req.on("end", async () => {
-          // JSON malformato → 400, come in produzione (api/chat.ts).
+          // JSON non valido → 400 (richiesta errata), come fa api/chat.ts online.
           let parsed: unknown;
           try {
             parsed = JSON.parse(body);

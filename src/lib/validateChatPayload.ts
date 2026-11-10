@@ -10,11 +10,9 @@ export interface ChatPayload {
   userMessage: string;
 }
 
-/**
- * Valida il body ricevuto da /api/chat. Usata sia dalla funzione Vercel
- * sia dal dev server, così locale e produzione accettano gli stessi dati.
- * Restituisce null se il payload non è valido.
- */
+// Controlla i dati ricevuti da /api/chat; restituisce null se non sono validi.
+// Arrivano da internet (chiunque può inviare qualsiasi cosa), per questo sono `unknown`
+// e ogni campo viene verificato prima dell'uso. Usata sia online sia in locale.
 export function validateChatPayload(data: unknown): ChatPayload | null {
   if (!data || typeof data !== "object") return null;
   const obj = data as Record<string, unknown>;
@@ -33,7 +31,7 @@ export function validateChatPayload(data: unknown): ChatPayload | null {
     const msg = m as Record<string, unknown>;
     if (msg.role !== "user" && msg.role !== "assistant") return null;
     if (typeof msg.content !== "string") return null;
-    // Le risposte dell'assistente possono essere più lunghe dei messaggi utente.
+    // Lo storico include le risposte di Claude, più lunghe delle domande: fino a 4 volte il limite.
     if (msg.content.length > MAX_USER_MESSAGE_LENGTH * 4) return null;
   }
 
