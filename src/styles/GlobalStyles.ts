@@ -38,6 +38,12 @@ const GlobalStyles = createGlobalStyle`
     background: none;
   }
 
+  /* Contorno visibile solo con la tastiera, non al clic del mouse. */
+  :focus-visible {
+    outline: 2px solid ${theme.colors.accent};
+    outline-offset: 2px;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
   }

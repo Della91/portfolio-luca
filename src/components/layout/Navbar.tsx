@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RiCloseLine, RiMenu3Line } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTES } from "../../data/routes";
 import { theme } from "../../styles/theme";
@@ -10,7 +10,9 @@ export default function Navbar() {
 
   return (
     <Header>
-      <Brand>Luca Della Vecchia</Brand>
+      <Brand to="/" onClick={() => setMenuOpen(false)}>
+        Luca Della Vecchia
+      </Brand>
 
       <DesktopNav>
         {ROUTES.map(({ to, label }) => (
@@ -64,7 +66,7 @@ const Header = styled.header`
   }
 `;
 
-const Brand = styled.span`
+const Brand = styled(Link)`
   font-size: 1.2rem;
   font-weight: normal;
   color: ${theme.colors.accent};
