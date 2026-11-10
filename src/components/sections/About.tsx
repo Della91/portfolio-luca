@@ -36,7 +36,7 @@ export default function About() {
               {profile.remoteOpen && (
                 <InfoItem>
                   <FiMonitor size={13} />
-                  Open to remote work
+                  Disponibile per lavoro da remoto
                 </InfoItem>
               )}
             </InfoList>

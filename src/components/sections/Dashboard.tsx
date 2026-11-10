@@ -76,12 +76,10 @@ const Hero = styled.div`
   display: grid;
   grid-template-columns: 1fr 42%;
   gap: 32px;
-  min-height: 85vh;
-  align-items: stretch;
+  align-items: center;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
-    min-height: unset;
   }
 `;
 
@@ -216,12 +214,12 @@ const PhotoColumn = styled.div`
   border-radius: ${theme.radii.cardLg};
   border: 1px solid ${theme.colors.border};
   overflow: hidden;
-  min-height: 600px;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 640px;
   background: ${theme.colors.surface};
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    min-height: unset;
-    aspect-ratio: 4 / 5;
     max-width: 440px;
     width: 100%;
     margin: 0 auto;

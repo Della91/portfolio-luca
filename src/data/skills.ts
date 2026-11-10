@@ -18,7 +18,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     title: "Integrazione AI & LLM",
-    items: ["Anthropic SDK", "Claude API", "Streaming SSE", "Serverless Functions (Vercel)"],
+    items: ["Claude API (Anthropic SDK)", "Prompt engineering", "Streaming SSE"],
   },
   {
     title: "Type Safety & Validazione",
@@ -30,7 +30,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     title: "Strumenti & Ambiente di Sviluppo",
-    items: ["Git", "GitLab", "Postman", "Xcode", "Android Studio", "Sequel Ace"],
+    items: ["Git", "GitLab", "Postman", "Xcode", "Android Studio", "Sequel Ace", "Serverless Functions (Vercel)"],
   },
   {
     title: "Workflow & Project Management",

@@ -45,6 +45,14 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages, streamingText, error]);
 
+  // Il campo cresce con il testo fino a max-height, poi scorre.
+  useLayoutEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [input]);
+
   useEscapeKey(open, onClose);
 
   const handleSubmit = (e?: FormEvent) => {
@@ -280,6 +288,7 @@ const TextArea = styled.textarea`
   resize: none;
   max-height: 120px;
   min-height: 38px;
+  overflow-y: auto;
   padding: 10px 12px;
   font-family: inherit;
   font-size: 0.85rem;
@@ -291,8 +300,10 @@ const TextArea = styled.textarea`
   outline: none;
   transition: border-color ${theme.transitions.default};
 
-  &:focus {
-    border-color: ${theme.colors.borderMid};
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border-color: ${theme.colors.accent};
   }
 
   &::placeholder {

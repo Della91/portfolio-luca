@@ -13,7 +13,7 @@ export interface Experience {
 export const experiences: Experience[] = [
   {
     company: "Icaro World",
-    role: "Front-end Developer",
+    role: "Frontend Developer",
     period: "Giu 2024 – Presente",
     location: "Milano, MI",
     description:
@@ -34,7 +34,7 @@ export const experiences: Experience[] = [
     technologies: ["React", "TypeScript", "Material UI", "Axios", "REST API", "React Router", "Context API", "io-ts", "Styled Components"],
   },
   {
-    company: "GREENEXT Technologies S.p.A",
+    company: "GREENEXT Technologies S.p.A.",
     role: "Mobile Developer",
     period: "Ago 2023 – Giu 2024",
     location: "Aprilia, LT",
