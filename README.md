@@ -34,8 +34,7 @@ src/
 └── assets/            # Immagini
 
 api/
-├── chat.ts            # Vercel Edge Function — inoltra le richieste ad Anthropic
-└── _constants.ts      # Limiti e modello del chatbot
+└── chat.ts            # Vercel Edge Function — inoltra le richieste ad Anthropic
 ```
 
 ## Sviluppo locale

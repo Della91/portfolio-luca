@@ -3,17 +3,8 @@ import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import Anthropic from "@anthropic-ai/sdk";
 import { buildSystemPrompt } from "./src/lib/buildSystemPrompt";
-import {
-  CLAUDE_MODEL,
-  MAX_OUTPUT_TOKENS,
-  MAX_USER_MESSAGE_LENGTH,
-  MAX_HISTORY_TURNS,
-} from "./api/_constants";
-
-interface ClientMessage {
-  role: "user" | "assistant";
-  content: string;
-}
+import { CLAUDE_MODEL, MAX_OUTPUT_TOKENS } from "./src/lib/chatConfig";
+import { validateChatPayload } from "./src/lib/validateChatPayload";
 
 /**
  * Plugin Vite che simula la Vercel Function /api/chat durante lo sviluppo locale.
@@ -49,16 +40,20 @@ function devChatApiPlugin(apiKey: string): Plugin {
         });
 
         req.on("end", async () => {
+          // JSON malformato → 400, come in produzione (api/chat.ts).
+          let parsed: unknown;
           try {
-            const parsed = JSON.parse(body) as {
-              userMessage?: unknown;
-              messages?: unknown;
-            };
+            parsed = JSON.parse(body);
+          } catch {
+            res.statusCode = 400;
+            res.setHeader("content-type", "application/json");
+            res.end(JSON.stringify({ error: "Payload JSON non valido." }));
+            return;
+          }
 
-            const userMessage =
-              typeof parsed.userMessage === "string" ? parsed.userMessage.trim() : "";
-
-            if (!userMessage || userMessage.length > MAX_USER_MESSAGE_LENGTH) {
+          try {
+            const payload = validateChatPayload(parsed);
+            if (!payload) {
               res.statusCode = 400;
               res.setHeader("content-type", "application/json");
               res.end(
@@ -67,22 +62,11 @@ function devChatApiPlugin(apiKey: string): Plugin {
               return;
             }
 
-            const rawMessages = Array.isArray(parsed.messages) ? parsed.messages : [];
-            if (rawMessages.length > MAX_HISTORY_TURNS) {
-              res.statusCode = 400;
-              res.setHeader("content-type", "application/json");
-              res.end(JSON.stringify({ error: "Storico conversazione troppo lungo." }));
-              return;
-            }
-
             const anthropic = new Anthropic({ apiKey });
 
             const messages: Anthropic.MessageParam[] = [
-              ...(rawMessages as ClientMessage[]).map((m) => ({
-                role: m.role as "user" | "assistant",
-                content: m.content,
-              })),
-              { role: "user", content: userMessage },
+              ...payload.messages.map((m) => ({ role: m.role, content: m.content })),
+              { role: "user", content: payload.userMessage },
             ];
 
             res.setHeader("content-type", "text/event-stream; charset=utf-8");

@@ -14,6 +14,7 @@ import ChatMessage from "./ChatMessage";
 import SuggestedPrompts from "./SuggestedPrompts";
 import { useChat } from "../../hooks/useChat";
 import { useEscapeKey } from "../../hooks/useEscapeKey";
+import { MAX_USER_MESSAGE_LENGTH } from "../../lib/chatConfig";
 
 interface Props {
   open: boolean;
@@ -24,7 +25,6 @@ export interface ChatPanelHandle {
   focusInput: () => void;
 }
 
-const MAX_INPUT_LENGTH = 1000;
 
 const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
   { open, onClose },
@@ -129,7 +129,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
         <TextArea
           ref={inputRef}
           value={input}
-          onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+          onChange={(e) => setInput(e.target.value.slice(0, MAX_USER_MESSAGE_LENGTH))}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
@@ -138,7 +138,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
           }}
           placeholder="Scrivi un messaggio…"
           rows={1}
-          maxLength={MAX_INPUT_LENGTH}
+          maxLength={MAX_USER_MESSAGE_LENGTH}
           aria-label="Messaggio"
           disabled={isLoading}
         />

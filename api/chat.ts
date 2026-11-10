@@ -2,33 +2,28 @@ import Anthropic from "@anthropic-ai/sdk";
 import { buildSystemPrompt } from "../src/lib/buildSystemPrompt";
 import {
   CLAUDE_MODEL,
-  MAX_HISTORY_TURNS,
   MAX_OUTPUT_TOKENS,
-  MAX_USER_MESSAGE_LENGTH,
   RATE_LIMIT_PER_IP,
   RATE_LIMIT_WINDOW_MS,
-} from "./_constants";
+} from "../src/lib/chatConfig";
+import { validateChatPayload } from "../src/lib/validateChatPayload";
 
 export const config = {
   runtime: "edge",
 };
 
-interface ClientMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-interface ChatPayload {
-  messages: ClientMessage[];
-  userMessage: string;
-}
-
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
+const GENERIC_ERROR = "Il servizio non è disponibile al momento. Riprova tra poco.";
+
+// x-real-ip è impostato da Vercel e non è falsificabile dal client;
+// il primo valore di x-forwarded-for invece può essere scritto da chiunque.
 function getClientIp(req: Request): string {
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp) return realIp;
+  // Fallback: l'ultimo valore è quello aggiunto dal proxy, non dal client.
   const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return req.headers.get("x-real-ip") ?? "unknown";
+  return forwarded?.split(",").pop()?.trim() || "unknown";
 }
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
@@ -55,30 +50,6 @@ function jsonError(message: string, status: number): Response {
   });
 }
 
-function validatePayload(data: unknown): ChatPayload | null {
-  if (!data || typeof data !== "object") return null;
-  const obj = data as Record<string, unknown>;
-
-  const userMessage = obj.userMessage;
-  if (typeof userMessage !== "string") return null;
-  const trimmed = userMessage.trim();
-  if (trimmed.length === 0 || trimmed.length > MAX_USER_MESSAGE_LENGTH) return null;
-
-  const messages = obj.messages;
-  if (!Array.isArray(messages)) return null;
-  if (messages.length > MAX_HISTORY_TURNS) return null;
-
-  for (const m of messages) {
-    if (!m || typeof m !== "object") return null;
-    const msg = m as Record<string, unknown>;
-    if (msg.role !== "user" && msg.role !== "assistant") return null;
-    if (typeof msg.content !== "string") return null;
-    if (msg.content.length > MAX_USER_MESSAGE_LENGTH * 4) return null;
-  }
-
-  return { messages: messages as ClientMessage[], userMessage: trimmed };
-}
-
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== "POST") {
     return jsonError("Method not allowed", 405);
@@ -86,7 +57,8 @@ export default async function handler(req: Request): Promise<Response> {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return jsonError("Configurazione del server incompleta: ANTHROPIC_API_KEY mancante.", 500);
+    console.error("[api/chat] ANTHROPIC_API_KEY mancante nelle variabili d'ambiente.");
+    return jsonError(GENERIC_ERROR, 500);
   }
 
   const ip = getClientIp(req);
@@ -105,7 +77,7 @@ export default async function handler(req: Request): Promise<Response> {
     return jsonError("Payload JSON non valido.", 400);
   }
 
-  const payload = validatePayload(parsed);
+  const payload = validateChatPayload(parsed);
   if (!payload) {
     return jsonError("Messaggio non valido. Controlla lunghezza e formato.", 400);
   }
@@ -114,10 +86,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   // Storico + messaggio corrente dell'utente nel formato richiesto da Claude.
   const messages: Anthropic.MessageParam[] = [
-    ...payload.messages.map((m) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    })),
+    ...payload.messages.map((m) => ({ role: m.role, content: m.content })),
     { role: "user", content: payload.userMessage },
   ];
 
@@ -155,17 +124,15 @@ export default async function handler(req: Request): Promise<Response> {
         controller.enqueue(encoder.encode("data: [DONE]\n\n"));
         controller.close();
       } catch (err) {
-        const raw = err instanceof Error ? err.message : "Errore sconosciuto";
-        let message: string;
+        // Il dettaglio va solo nei log di Vercel; al visitatore un messaggio generico.
+        console.error("[api/chat] Errore Anthropic:", err);
+        const status = err instanceof Anthropic.APIError ? err.status : undefined;
 
-        if (raw.includes("401") || raw.includes("authentication")) {
-          message = "Chiave API non valida. Controlla ANTHROPIC_API_KEY.";
-        } else if (raw.includes("429") || raw.toLowerCase().includes("rate limit")) {
+        let message = GENERIC_ERROR;
+        if (status === 429) {
           message = "Il servizio AI è temporaneamente occupato. Attendi un momento e riprova.";
-        } else if (raw.includes("529") || raw.toLowerCase().includes("overloaded")) {
+        } else if (status === 529) {
           message = "Il servizio AI è sotto carico. Riprova tra qualche secondo.";
-        } else {
-          message = `Errore del modello AI: ${raw.slice(0, 120)}`;
         }
 
         controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: message })}\n\n`));
