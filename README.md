@@ -9,7 +9,7 @@ Portfolio personale sviluppato con React, TypeScript e Vite. Include un chatbot 
 - **Styled Components** — stili
 - **Framer Motion** — animazioni
 - **React Router v7** — routing
-- **Claude API (Anthropic)** — chatbot AI tramite Vercel Edge Function
+- **Claude API (Anthropic)** — chatbot AI tramite Vercel Function
 
 ## Funzionalità
 
@@ -34,7 +34,7 @@ src/
 └── assets/            # Immagini
 
 api/
-└── chat.ts            # Vercel Edge Function — inoltra le richieste ad Anthropic
+└── chat.ts            # Vercel Function — inoltra le richieste ad Anthropic
 ```
 
 ## Sviluppo locale
@@ -57,6 +57,6 @@ Il dev server di Vite include un middleware che simula la funzione Vercel in loc
 
 ## Deploy
 
-Il sito è pubblicato su **Vercel**. La funzione `api/chat.ts` gira sul runtime Edge e invia le risposte in streaming tramite SSE.
+Il sito è pubblicato su **Vercel**. La funzione `api/chat.ts` gira sul runtime Node.js e invia le risposte in streaming tramite SSE.
 
 Prima del deploy, imposta la variabile d'ambiente `ANTHROPIC_API_KEY` nelle impostazioni del progetto su Vercel.
