@@ -8,11 +8,7 @@ import {
 } from "../src/lib/chatConfig";
 import { validateChatPayload } from "../src/lib/validateChatPayload";
 
-export const config = {
-  runtime: "edge",
-};
-
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const rateLimitMap = new Map<string, { count: number; resetAt: number; }>();
 
 const GENERIC_ERROR = "Il servizio non è disponibile al momento. Riprova tra poco.";
 
@@ -25,7 +21,7 @@ function getClientIp(req: Request): string {
   return forwarded?.split(",").pop()?.trim() || "unknown";
 }
 
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number; } {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
 
@@ -49,11 +45,9 @@ function jsonError(message: string, status: number): Response {
   });
 }
 
-export default async function handler(req: Request): Promise<Response> {
-  if (req.method !== "POST") {
-    return jsonError("Method not allowed", 405);
-  }
-
+// Export per metodo HTTP: Vercel chiama POST con Request/Response standard
+// e risponde da solo 405 agli altri metodi.
+export async function POST(req: Request): Promise<Response> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.error("[api/chat] ANTHROPIC_API_KEY mancante nelle variabili d'ambiente.");
