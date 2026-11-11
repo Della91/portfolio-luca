@@ -1,12 +1,14 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { buildSystemPrompt } from "../src/lib/buildSystemPrompt";
+// Gli import locali usano ".js" anche se i file sono .ts: su Vercel girano i file già convertiti
+// in .js e Node, con i moduli ES, non trova gli import senza estensione.
+import { buildSystemPrompt } from "../src/lib/buildSystemPrompt.js";
 import {
   CLAUDE_MODEL,
   MAX_OUTPUT_TOKENS,
   RATE_LIMIT_PER_IP,
   RATE_LIMIT_WINDOW_MS,
-} from "../src/lib/chatConfig";
-import { validateChatPayload } from "../src/lib/validateChatPayload";
+} from "../src/lib/chatConfig.js";
+import { validateChatPayload } from "../src/lib/validateChatPayload.js";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number; }>();
 

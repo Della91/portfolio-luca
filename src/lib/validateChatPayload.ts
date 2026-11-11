@@ -1,4 +1,5 @@
-import { MAX_HISTORY_TURNS, MAX_USER_MESSAGE_LENGTH } from "./chatConfig";
+// ".js" obbligatorio: questo file è usato da api/chat.ts, che su Vercel gira con Node (vedi lì).
+import { MAX_HISTORY_TURNS, MAX_USER_MESSAGE_LENGTH } from "./chatConfig.js";
 
 export interface ClientMessage {
   role: "user" | "assistant";

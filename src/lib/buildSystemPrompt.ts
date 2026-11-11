@@ -1,7 +1,8 @@
-import { profile } from "../data/profile";
-import { skillCategories } from "../data/skills";
-import { experiences } from "../data/experience";
-import { projects } from "../data/projects";
+// ".js" obbligatorio: questo file è usato da api/chat.ts, che su Vercel gira con Node (vedi lì).
+import { profile } from "../data/profile.js";
+import { skillCategories } from "../data/skills.js";
+import { experiences } from "../data/experience.js";
+import { projects } from "../data/projects.js";
 
 /**
  * Costruisce il system prompt per l'assistente "Chiedi a Luca".
