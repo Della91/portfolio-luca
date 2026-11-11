@@ -75,7 +75,7 @@ export const socialLinks: SocialLink[] = [
   {
     href: profile.github,
     label: "GitHub",
-    value: "github.com/lucadellavecchia",
+    value: "github.com/Della91",
     icon: <FiGithub size={14} />,
     external: true,
   },

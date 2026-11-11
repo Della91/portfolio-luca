@@ -14,7 +14,7 @@ export const contactLinks: ContactLink[] = [
   },
   {
     label: "GitHub",
-    value: "github.com/lucadellavecchia",
+    value: "github.com/Della91",
     url: "https://github.com/Della91?tab=repositories",
     icon: "github",
   },

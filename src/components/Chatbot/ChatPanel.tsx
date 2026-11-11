@@ -12,11 +12,12 @@ import { FiRefreshCw, FiSend, FiX } from "react-icons/fi";
 import { theme } from "../../styles/theme";
 import ChatMessage from "./ChatMessage";
 import SuggestedPrompts from "./SuggestedPrompts";
-import { useChat } from "../../hooks/useChat";
+import type { UseChatResult } from "../../hooks/useChat";
 import { useEscapeKey } from "../../hooks/useEscapeKey";
+import { MAX_USER_MESSAGE_LENGTH } from "../../lib/chatConfig";
 
 interface Props {
-  open: boolean;
+  chat: UseChatResult; // Arriva da Chatbot: vedi lì il perché.
   onClose: () => void;
 }
 
@@ -24,13 +25,11 @@ export interface ChatPanelHandle {
   focusInput: () => void;
 }
 
-const MAX_INPUT_LENGTH = 1000;
-
 const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
-  { open, onClose },
+  { chat, onClose },
   ref,
 ) {
-  const { messages, streamingText, isLoading, error, sendMessage, reset } = useChat();
+  const { messages, streamingText, isLoading, error, sendMessage, reset } = chat;
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -53,7 +52,8 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
     el.style.height = `${el.scrollHeight}px`;
   }, [input]);
 
-  useEscapeKey(open, onClose);
+  // Esc chiude la chat; sempre attivo perché il pannello esiste solo a chat aperta.
+  useEscapeKey(true, onClose);
 
   const handleSubmit = (e?: FormEvent) => {
     e?.preventDefault();
@@ -129,7 +129,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
         <TextArea
           ref={inputRef}
           value={input}
-          onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+          onChange={(e) => setInput(e.target.value.slice(0, MAX_USER_MESSAGE_LENGTH))}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
@@ -138,7 +138,7 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
           }}
           placeholder="Scrivi un messaggio…"
           rows={1}
-          maxLength={MAX_INPUT_LENGTH}
+          maxLength={MAX_USER_MESSAGE_LENGTH}
           aria-label="Messaggio"
           disabled={isLoading}
         />

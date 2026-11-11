@@ -1,69 +1,62 @@
 # Portfolio — Luca Della Vecchia
 
-Personal portfolio built with React, TypeScript, and Vite. Features an AI-powered chatbot that answers questions about my experience and projects, powered by Claude (Anthropic).
+Portfolio personale sviluppato con React, TypeScript e Vite. Include un chatbot AI, basato su Claude di Anthropic, che risponde a domande sulla mia esperienza e sui miei progetti.
 
-## Tech Stack
+## Stack tecnologico
 
 - **React 19** + **TypeScript**
 - **Vite** — build tool
-- **Styled Components** — styling
-- **Framer Motion** — animations
+- **Styled Components** — stili
+- **Framer Motion** — animazioni
 - **React Router v7** — routing
-- **Claude API (Anthropic)** — AI chatbot via Vercel Serverless Function
+- **Claude API (Anthropic)** — chatbot AI tramite Vercel Function
 
-## Features
+## Funzionalità
 
-- Responsive portfolio sections (about, skills, projects, contacts)
-- AI chatbot integrated directly in the UI — asks it anything about me
-- Streaming responses via SSE
-- Deployed on Vercel with a custom domain
+- Sezioni responsive: profilo, competenze, esperienza, progetti, contatti
+- Chatbot AI integrato nell'interfaccia: puoi chiedergli qualsiasi cosa su di me
+- Risposte in streaming tramite SSE
+- Deploy su Vercel
 
-## Project Structure
+## Struttura del progetto
 
 ```
 src/
 ├── components/
-│   ├── Chatbot/       # AI chatbot UI + logic
-│   ├── sections/      # Portfolio sections
-│   ├── layout/        # Layout components
-│   └── ui/            # Reusable UI components
-├── hooks/             # Custom React hooks
-├── lib/               # Utilities (system prompt builder, etc.)
-├── data/              # Static content
-└── types/             # TypeScript types
+│   ├── Chatbot/       # UI e logica del chatbot
+│   ├── sections/      # Sezioni del portfolio
+│   ├── layout/        # Componenti di layout
+│   └── ui/            # Componenti UI riutilizzabili
+├── hooks/             # Custom hook React
+├── lib/               # Utility (generazione del system prompt, ecc.)
+├── data/              # Contenuti statici
+├── styles/            # Tema e stili globali
+└── assets/            # Immagini
 
 api/
-└── chat.ts            # Vercel Serverless Function — proxies requests to Anthropic
+└── chat.ts            # Vercel Function — inoltra le richieste ad Anthropic
 ```
 
-## Local Development
+## Sviluppo locale
 
 ```bash
 npm install
 ```
 
-Create a `.env.local` file:
+Crea un file `.env.local`:
 
 ```
-ANTHROPIC_API_KEY=your_api_key_here
+ANTHROPIC_API_KEY=la_tua_chiave_api
 ```
 
 ```bash
 npm run dev
 ```
 
-The Vite dev server includes a middleware that simulates the Vercel Function locally, so no Vercel CLI needed.
+Il dev server di Vite include un middleware che simula la funzione Vercel in locale, quindi non serve la Vercel CLI.
 
 ## Deploy
 
-Deployed on **Vercel**. The `api/chat.ts` function runs as a Serverless Function with a 30s timeout to support streaming responses.
+Il sito è pubblicato su **Vercel**. La funzione `api/chat.ts` gira sul runtime Node.js e invia le risposte in streaming tramite SSE.
 
-Set the `ANTHROPIC_API_KEY` environment variable in the Vercel project settings before deploying.
-
----
-
-## Note in italiano
-
-Portfolio personale sviluppato con React, TypeScript e Vite. Include un chatbot AI integrato nell'interfaccia, alimentato da Claude di Anthropic, che risponde a domande sulla mia esperienza e sui miei progetti.
-
-Il chatbot utilizza una Vercel Serverless Function come proxy verso l'API Anthropic, con supporto allo streaming delle risposte tramite SSE. In sviluppo locale, un plugin Vite personalizzato simula la funzione serverless senza necessità di Vercel CLI.
+Prima del deploy, imposta la variabile d'ambiente `ANTHROPIC_API_KEY` nelle impostazioni del progetto su Vercel.

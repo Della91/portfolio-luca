@@ -50,14 +50,38 @@ function getZone(nx: number, ny: number): Zone {
 
 const DEBOUNCE_MS = 60;
 
-export default function ProfileAvatar() {
+// Giro dello sguardo per la modalità automatica; il centro ripetuto fa da pausa.
+const LOOK_AROUND: Zone[] = ["left", "upper-left", "up", "right", "lower-right", "down", "center", "center"];
+const LOOK_STEP_MS = 700;
+
+interface Props {
+  // true: l'avatar si guarda intorno da solo e ignora il mouse (usato nella pagina 404).
+  autoLook?: boolean;
+}
+
+export default function ProfileAvatar({ autoLook = false }: Props) {
   const [zone, setZone] = useState<Zone>("center");
   const rafRef = useRef<number | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentZoneRef = useRef<Zone>("center");
   const pendingRef = useRef<Zone>("center");
 
+  // Modalità automatica. Ferma per chi ha attivato "riduci movimento" nel sistema.
   useEffect(() => {
+    if (!autoLook) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let step = 0;
+    const id = window.setInterval(() => {
+      step = (step + 1) % LOOK_AROUND.length;
+      setZone(LOOK_AROUND[step]);
+    }, LOOK_STEP_MS);
+    return () => window.clearInterval(id);
+  }, [autoLook]);
+
+  // Modalità normale: lo sguardo segue il mouse (solo su dispositivi con mouse).
+  useEffect(() => {
+    if (autoLook) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
     const handleMove = (e: MouseEvent) => {
@@ -93,7 +117,7 @@ export default function ProfileAvatar() {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, []);
+  }, [autoLook]);
 
   return (
     <Frame>

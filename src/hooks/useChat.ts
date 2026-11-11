@@ -1,4 +1,5 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { MAX_HISTORY_TURNS } from "../lib/chatConfig";
 
 export type MessageRole = "user" | "assistant";
 
@@ -7,7 +8,7 @@ export interface ChatMessage {
   content: string;
 }
 
-interface UseChatResult {
+export interface UseChatResult {
   messages: ChatMessage[];
   streamingText: string;
   isLoading: boolean;
@@ -17,6 +18,23 @@ interface UseChatResult {
 }
 
 const ENDPOINT = "/api/chat";
+
+// Il server accetta al massimo MAX_HISTORY_TURNS messaggi precedenti: teniamo i più recenti.
+// Se il primo rimasto è una risposta lo togliamo, perché Claude vuole iniziare da una domanda.
+function trimHistory(history: ChatMessage[]): ChatMessage[] {
+  const recent = history.slice(-MAX_HISTORY_TURNS);
+  return recent[0]?.role === "assistant" ? recent.slice(1) : recent;
+}
+
+// La risposta arriva a pezzi (`data: {"text":"..."}`). Un pezzo rovinato restituisce null
+// e viene saltato, invece di bloccare tutta la risposta.
+function parseSseData(payload: string): { text?: string; error?: string } | null {
+  try {
+    return JSON.parse(payload) as { text?: string; error?: string };
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Hook che gestisce lo stato della chat e la comunicazione streaming SSE
@@ -30,6 +48,9 @@ export function useChat(): UseChatResult {
 
   // Evita race condition se l'utente invia in rapida successione.
   const abortRef = useRef<AbortController | null>(null);
+
+  // Se il chatbot sparisce dalla pagina durante una risposta, interrompiamo la richiesta.
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   const reset = useCallback(() => {
     abortRef.current?.abort();
@@ -53,7 +74,7 @@ export function useChat(): UseChatResult {
       abortRef.current = controller;
 
       // Snapshot dello storico al momento dell'invio.
-      const history = messages;
+      const history = trimHistory(messages);
       const userMessage: ChatMessage = { role: "user", content: trimmed };
       setMessages((prev) => [...prev, userMessage]);
 
@@ -112,20 +133,11 @@ export function useChat(): UseChatResult {
                 buffer = "";
                 break;
               }
-              try {
-                const parsed = JSON.parse(payload) as {
-                  text?: string;
-                  error?: string;
-                };
-                if (parsed.error) {
-                  throw new Error(parsed.error);
-                }
-                if (parsed.text) {
-                  assembled += parsed.text;
-                  setStreamingText(assembled);
-                }
-              } catch (err) {
-                if (err instanceof Error) throw err;
+              const parsed = parseSseData(payload);
+              if (parsed?.error) throw new Error(parsed.error);
+              if (parsed?.text) {
+                assembled += parsed.text;
+                setStreamingText(assembled);
               }
             }
             newlineIndex = buffer.indexOf("\n\n");

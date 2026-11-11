@@ -4,6 +4,7 @@ import About from "./components/sections/About";
 import Contact from "./components/sections/Contact";
 import Dashboard from "./components/sections/Dashboard";
 import Experience from "./components/sections/Experience";
+import NotFound from "./components/sections/NotFound";
 import Projects from "./components/sections/Projects";
 import Skills from "./components/sections/Skills";
 import GlobalStyles from "./styles/GlobalStyles";
@@ -20,6 +21,8 @@ export default function App() {
           <Route path="experience" element={<Experience />} />
           <Route path="projects" element={<Projects />} />
           <Route path="contact" element={<Contact />} />
+          {/* Qualsiasi altro indirizzo: pagina 404, dentro il Layout per tenere navbar e chatbot. */}
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
