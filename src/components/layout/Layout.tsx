@@ -43,7 +43,7 @@ export default function Layout() {
             <BreadCurrent aria-current="page">{currentRoute.label}</BreadCurrent>
           </Breadcrumb>
         )}
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo(0, 0)}>
           <motion.div
             key={location.pathname}
             variants={pageVariants}
