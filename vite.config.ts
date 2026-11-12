@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import Anthropic from "@anthropic-ai/sdk";
 import { buildSystemPrompt } from "./src/lib/buildSystemPrompt";
-import { CLAUDE_MODEL, MAX_OUTPUT_TOKENS } from "./src/lib/chatConfig";
+import { CLAUDE_EFFORT, CLAUDE_MODEL, MAX_OUTPUT_TOKENS } from "./src/lib/chatConfig";
 import { validateChatPayload } from "./src/lib/validateChatPayload";
 
 /**
@@ -76,6 +76,7 @@ function devChatApiPlugin(apiKey: string): Plugin {
             const stream = anthropic.messages.stream({
               model: CLAUDE_MODEL,
               max_tokens: MAX_OUTPUT_TOKENS,
+              output_config: { effort: CLAUDE_EFFORT },
               system: buildSystemPrompt(),
               messages,
             });
