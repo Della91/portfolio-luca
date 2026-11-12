@@ -9,7 +9,7 @@ import { BaseCard } from "../ui/BaseCard";
 const STATUS_LABEL: Record<Project["status"], string> = {
   "in-progress": "In corso",
   completed: "Completato",
-  maintenance: "Manutenzione",
+  maintenance: "Online",
 };
 
 export default function Projects() {
