@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 // in .js e Node, con i moduli ES, non trova gli import senza estensione.
 import { buildSystemPrompt } from "../src/lib/buildSystemPrompt.js";
 import {
+  CLAUDE_EFFORT,
   CLAUDE_MODEL,
   MAX_OUTPUT_TOKENS,
   RATE_LIMIT_PER_IP,
@@ -94,6 +95,7 @@ export async function POST(req: Request): Promise<Response> {
         const response = await anthropic.messages.create({
           model: CLAUDE_MODEL,
           max_tokens: MAX_OUTPUT_TOKENS,
+          output_config: { effort: CLAUDE_EFFORT },
           system: [
             {
               type: "text",
