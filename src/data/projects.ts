@@ -30,7 +30,6 @@ export const projects: Project[] = [
       "SSE Streaming",
     ],
     githubUrl: "https://github.com/Della91/portfolio-luca",
-    liveUrl: "https://luca-della-vecchia.vercel.app",
     highlights: [
       "Streaming risposte AI via SSE",
       "Vercel Function con proxy verso Anthropic",
