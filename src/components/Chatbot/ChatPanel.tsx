@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useLayoutEffect,
   useRef,
@@ -49,8 +50,19 @@ const ChatPanel = forwardRef<ChatPanelHandle, Props>(function ChatPanel(
     const el = inputRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
+    const borders = el.offsetHeight - el.clientHeight;
+    el.style.height = `${el.scrollHeight + borders}px`;
   }, [input]);
+
+  // Su mobile la chat copre lo schermo: blocchiamo lo scorrimento della pagina dietro.
+  useEffect(() => {
+    if (!window.matchMedia(`(max-width: ${theme.breakpoints.mobile})`).matches) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
 
   // Esc chiude la chat; sempre attivo perché il pannello esiste solo a chat aperta.
   useEscapeKey(true, onClose);
@@ -173,12 +185,16 @@ const Panel = styled(motion.div)`
   z-index: 1000;
 
   @media (max-width: ${theme.breakpoints.mobile}) {
+    top: 0;
     bottom: 0;
     right: 0;
     left: 0;
     width: 100%;
-    max-height: 100vh;
     height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
     border-radius: 0;
     border: none;
   }
@@ -249,7 +265,7 @@ const MessageList = styled.div`
   gap: 10px;
   padding: 16px;
   overflow-y: auto;
-  scroll-behavior: smooth;
+  overscroll-behavior: contain;
 `;
 
 const Welcome = styled.div`

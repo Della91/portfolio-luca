@@ -27,11 +27,12 @@ export default function Navbar() {
         onClick={() => setMenuOpen((o) => !o)}
         aria-label={menuOpen ? "Chiudi menu" : "Apri menu"}
         aria-expanded={menuOpen}
+        aria-controls="mobile-menu"
       >
         {menuOpen ? <RiCloseLine size={22} /> : <RiMenu3Line size={22} />}
       </HamburgerBtn>
 
-      <MobileDrawer $open={menuOpen} aria-hidden={!menuOpen}>
+      <MobileDrawer id="mobile-menu" $open={menuOpen} aria-hidden={!menuOpen} inert={!menuOpen}>
         {ROUTES.map(({ to, label }) => (
           <MobileNavLink
             key={to}
@@ -59,6 +60,7 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
   height: 68px;
 
   @media (max-width: ${theme.breakpoints.mobile}) {
@@ -72,14 +74,19 @@ const Brand = styled(Link)`
   color: ${theme.colors.accent};
   letter-spacing: 0.05em;
   white-space: nowrap;
+  flex-shrink: 0;
 `;
 
 const DesktopNav = styled.nav`
   display: flex;
   align-items: center;
   gap: 4px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  @media (max-width: ${theme.breakpoints.tablet}) {
     display: none;
   }
 `;
@@ -107,16 +114,16 @@ const HamburgerBtn = styled.button`
   color: ${theme.colors.accent};
   padding: 4px;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  @media (max-width: ${theme.breakpoints.tablet}) {
     display: flex;
     align-items: center;
   }
 `;
 
-const MobileDrawer = styled.nav<{ $open: boolean }>`
+const MobileDrawer = styled.nav<{ $open: boolean; }>`
   display: none;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  @media (max-width: ${theme.breakpoints.tablet}) {
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -155,7 +162,7 @@ const MobileNavLink = styled(NavLink)`
 const Overlay = styled.div`
   display: none;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  @media (max-width: ${theme.breakpoints.tablet}) {
     display: block;
     position: fixed;
     inset: 68px 0 0 0;
