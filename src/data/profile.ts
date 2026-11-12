@@ -9,7 +9,7 @@ export const profile = {
   github: "https://github.com/Della91?tab=repositories",
 
   bio: [
-    "Frontend Developer con esperienza nello sviluppo di applicazioni web e mobile utilizzando React, TypeScript e React Native.",
+    "Sviluppo applicazioni web e mobile con React, TypeScript e React Native.",
     "Mi concentro sulla creazione di interfacce chiare, codice riutilizzabile e soluzioni scalabili, collaborando con il team per migliorare continuamente la qualità del prodotto.",
     "Credo che la differenza non stia solo nelle tecnologie conosciute, ma soprattutto nella capacità di analizzare i problemi e trovare soluzioni efficaci.",
   ],
