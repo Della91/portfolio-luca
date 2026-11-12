@@ -44,10 +44,6 @@ export default function Dashboard() {
         </HeroContent>
 
         <PhotoColumn>
-          <ProfileName>
-            <em>Luca</em>
-            <span>Della Vecchia</span>
-          </ProfileName>
           <ProfileAvatar />
         </PhotoColumn>
       </Hero>
@@ -223,29 +219,6 @@ const PhotoColumn = styled.div`
     max-width: 440px;
     width: 100%;
     margin: 0 auto;
-  }
-`;
-
-const ProfileName = styled.div`
-  position: absolute;
-  bottom: 24px;
-  left: 24px;
-  z-index: 2;
-  color: ${theme.colors.accent};
-  line-height: 1.2;
-  pointer-events: none;
-
-  em {
-    display: block;
-    font-style: italic;
-    font-size: 2rem;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
-  }
-
-  span {
-    display: block;
-    font-size: 1.1rem;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
   }
 `;
 
