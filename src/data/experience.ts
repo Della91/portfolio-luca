@@ -14,7 +14,7 @@ export const experiences: Experience[] = [
   {
     company: "Icaro World",
     role: "Frontend Developer",
-    period: "Giu 2024 – Presente",
+    period: "Giu 2024 – Feb 2026",
     location: "Milano, MI",
     description:
       "Sviluppo frontend di un gestionale web per la gestione di richieste, clienti e documentazione tecnica, occupandomi della progettazione della UI in Figma, della realizzazione di interfacce scalabili, della gestione dei flussi dati e dell'implementazione di funzionalità orientate all'efficienza operativa.",
